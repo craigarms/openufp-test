@@ -11,7 +11,7 @@ import time
 # TODO Add timing library
 
 def usage():
-    print('Usage: send_request [-h|--help] [-n|--n2h2|-w|--websense] [-a|--alive] [-u|--url <url>] [-s|--server <servername|ip>]')
+    print('Usage: send_request [-h|--help] [-n|--n2h2|-w|--websense] [-a|--alive] [-u|--url <url>] [-s|--server <servername|ip>] [-p|--port <port number>]')
 
 
 def isopen(ip,port):
@@ -99,7 +99,7 @@ def send_url(s, protocol, url):
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'hp:au:', ['help', 'n2h2','websense', 'alive', 'url','server'])
+        opts, args = getopt.getopt(sys.argv[1:], 'hnwau:s:p:', ['help', 'n2h2','websense', 'alive', 'url','server','port'])
     except getopt.GetoptError as err:
         print(str(err))
         usage()
@@ -109,6 +109,7 @@ def main():
     alive = 0
     url = ''
     host = ''
+    port = 0
     for o, a in opts:
         if o in ('-h', '--help'):
             usage()
@@ -123,6 +124,8 @@ def main():
             url = a
         elif o in ('-s', '--server'):
             host = a
+        elif o in ('-p', '--port'):
+            port = a
         else:
             assert False, 'unhandled option'
 
@@ -132,9 +135,10 @@ def main():
 
     if host == '':
         host = 'localhost'
-    if protocol == 'n2h2':
+
+    if port == 0 and protocol == 'n2h2':
         port = 4005
-    else:
+    elif port == 0:
         port = 15868
 
     if isopen(host, port):
