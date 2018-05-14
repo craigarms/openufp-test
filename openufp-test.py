@@ -4,6 +4,11 @@ import getopt
 import socket
 import time
 
+# TODO Support file containing list of sites to check
+# TODO Support for expected state in sites to check
+# TODO Parse response from server into plain text
+# TODO Write clean output OK/ERROR/ALLOW/DENY
+# TODO Add timing library
 
 def usage():
     print('Usage: send_request [-h|--help] [-n|--n2h2|-w|--websense] [-a|--alive] [-u|--url <url>] [-s|--server <servername|ip>]')
