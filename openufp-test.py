@@ -98,6 +98,7 @@ def send_url(s, protocol, url):
         return False
 
 def main():
+    print("Openufp URL tester v1.0")
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'hnwau:s:p:', ['help', 'n2h2','websense', 'alive', 'url','server','port'])
     except getopt.GetoptError as err:
@@ -147,15 +148,18 @@ def main():
         if alive == 1:
             if not isalive(s, protocol):
                 # Host online/port open no reply to alive request
-                sys.exit(2)
+                print("ERROR: isalive check on %s port %s failed, host online port open but no reply", host, port)
+                sys.exit(3)
         if url != '':
             if not send_url(s, protocol, url):
                 # Host online/port open no reply to url request
-                sys.exit(3)
+                print("ERROR: url check on %s port %s failed, host online port open but no reply", host, port)
+                sys.exit(4)
         s.close()
     else:
         # Host / Port not open
-        sys.exit(1)
+        print("ERROR: isopen check on %s port %s failed", host, port)
+        sys.exit(2)
 
 
 if __name__ == '__main__':
