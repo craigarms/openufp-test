@@ -34,8 +34,8 @@ def send_alive(s, protocol):
     data = ''
     if protocol == 'n2h2':
         print('Sending alive request')
-        alive = '\x02\x03\x01\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-        s.sendall(alive.encode())
+        alive = b'\x02\x03\x01\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+        s.sendall(alive)
         data = s.recv(256)
         print('Received', repr(data))
     else:
@@ -54,22 +54,22 @@ def send_url(s, protocol, url):
     data = ''
     if protocol == 'n2h2':
         print('Sending url request: %s' % url)
-        hdr = '\x02\x00\x01\x01\x01\x01'
+        hdr = b'\x02\x00\x01\x01\x01\x01'
         srcip = [192, 168, 0, 1]
         destip = [192, 168, 100, 1]
         url_req = hdr
         for chars in srcip:
-            url_req += chr(chars)
+            url_req += bytes((chars,))
         for chars in destip:
-            url_req += chr(chars)
+            url_req += bytes((chars,))
         len1 = int(len(url) / 256)
         len2 = int(len(url) % 256)
-        url_req += chr(len1)
-        url_req += chr(len2)
-        url_req += '\x00\x00'
-        url_req += str(url)
-        url_req += '\x00'
-        s.sendall(url_req.encode())
+        url_req += bytes((len1,))
+        url_req += bytes((len2,))
+        url_req += b'\x00\x00'
+        url_req += url.encode()
+        url_req += b'\x00'
+        s.sendall(url_req)
         data = s.recv(1024)
         print('Received', repr(data))
     else:
