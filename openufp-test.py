@@ -35,19 +35,20 @@ def send_alive(s, protocol):
     if protocol == 'n2h2':
         print('Sending alive request')
         alive = '\x02\x03\x01\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
-        s.sendall(alive)
+        s.sendall(bytes(alive))
         data = s.recv(256)
         print('Received', repr(data))
     else:
         print('Sending alive request')
         alive = '\x00\x0c\x00\x81\x00\x01\x00\x00\x02\x0a\x09\x09'
-        s.sendall(alive)
+        s.sendall(bytes(alive))
         data = s.recv(256)
         print('Received', repr(data))
     if data != '':
         return True
     else:
         return False
+
 
 def send_url(s, protocol, url):
     data = ''
@@ -68,7 +69,7 @@ def send_url(s, protocol, url):
         url_req += '\x00\x00'
         url_req += str(url)
         url_req += '\x00'
-        s.sendall(url_req)
+        s.sendall(bytes(url_req))
         data = s.recv(1024)
         print('Received', repr(data))
     else:
@@ -89,7 +90,7 @@ def send_url(s, protocol, url):
         url_req += chr(len1)
         url_req += chr(len2)
         url_req += str(url)
-        s.sendall(url_req)
+        s.sendall(bytes(url_req))
         data = s.recv(1024)
         print('Received', repr(data))
     if data != '':
