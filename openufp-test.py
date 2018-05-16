@@ -62,8 +62,8 @@ def send_url(s, protocol, url):
             url_req += chr(chars)
         for chars in destip:
             url_req += chr(chars)
-        len1 = len(url) / 256
-        len2 = len(url) % 256
+        len1 = int(len(url) / 256)
+        len2 = int(len(url) % 256)
         url_req += chr(len1)
         url_req += chr(len2)
         url_req += '\x00\x00'
@@ -74,8 +74,8 @@ def send_url(s, protocol, url):
         print('Received', repr(data))
     else:
         print('Sending url request: %s', url)
-        len1 = (26+len(url)) / 256
-        len2 = (26+len(url)) % 256
+        len1 = int((26+len(url)) / 256)
+        len2 = int((26+len(url)) % 256)
         url_req = chr(len1)
         url_req += chr(len2)
         url_req += '\x00\x80\x00\x01\x00\x00\x04\x01\x02\x05\x00\x01\x00\x00'
@@ -85,8 +85,8 @@ def send_url(s, protocol, url):
             url_req += chr(chars)
         for chars in destip:
             url_req += chr(chars)
-        len1 = len(url) / 256
-        len2 = len(url) % 256
+        len1 = int(len(url) / 256)
+        len2 = int(len(url) % 256)
         url_req += chr(len1)
         url_req += chr(len2)
         url_req += str(url)
