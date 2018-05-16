@@ -40,8 +40,8 @@ def send_alive(s, protocol):
         print('Received', repr(data))
     else:
         print('Sending alive request')
-        alive = '\x00\x0c\x00\x81\x00\x01\x00\x00\x02\x0a\x09\x09'
-        s.sendall(alive.encode())
+        alive = b'\x00\x0c\x00\x81\x00\x01\x00\x00\x02\x0a\x09\x09'
+        s.sendall(alive)
         data = s.recv(256)
         print('Received', repr(data))
     if data != '':
@@ -76,21 +76,21 @@ def send_url(s, protocol, url):
         print('Sending url request: %s', url)
         len1 = int((26+len(url)) / 256)
         len2 = int((26+len(url)) % 256)
-        url_req = chr(len1)
-        url_req += chr(len2)
-        url_req += '\x00\x80\x00\x01\x00\x00\x04\x01\x02\x05\x00\x01\x00\x00'
+        url_req = bytes((len1,))
+        url_req += bytes((len2,))
+        url_req += b'\x00\x80\x00\x01\x00\x00\x04\x01\x02\x05\x00\x01\x00\x00'
         srcip = [192, 168, 0, 1]
         destip = [192, 168, 100, 1]
         for chars in srcip:
-            url_req += chr(chars)
+            url_req += bytes((chars,))
         for chars in destip:
-            url_req += chr(chars)
+            url_req += bytes((chars,))
         len1 = int(len(url) / 256)
         len2 = int(len(url) % 256)
-        url_req += chr(len1)
-        url_req += chr(len2)
-        url_req += str(url)
-        s.sendall(url_req.encode())
+        url_req += bytes((len1,))
+        url_req += bytes((len2,))
+        url_req += url.encode()
+        s.sendall(url_req)
         data = s.recv(1024)
         print('Received', repr(data))
     if data != '':
